@@ -1,0 +1,67 @@
+---
+title: "空气质量指数质量leafletCN学习"
+author: <a href="mailto:liyimingningbo@163.com" target="_blank">George Lee</a>
+date: "2017年3月4日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(XML)
+library(leafletCN)
+```
+##数据包作者及内容版权所属
+
+<a href="https://github.com/lchiffon/leafletCN" target="_blank">郎大为</a>, 坐标上海，J.D. POWER数据分析师，做汽车行业的咨询。工作内容是面向价值观的分析和面向幻灯片的编程，工作之余是一个可视化爱好者, REmap，wordcloud2包的作者。戏称不写R包的全栈不是好分析师…
+
+## 总体思路
+1. 载入包, 并读取网页的数据
+2. 整理数据并进行命名, 包含了获取其中的城市, AQI以及将其转化为数值
+3. 使用geojsonMap绘制细分到城市的污染情况
+
+## 常用函数及功能
+- regionNames 返回某个地图的区域名
+- demomap 传入地图名绘制示例地图
+- geojsonMap 将一个分层颜色图绘制在一个实时地图上
+- amap 在leaflet地图上叠加高德地图
+- read.geoShape 读取一个geojson的对象,保存成spdataframe,以方便leaflet调用
+- leafletGeo 用地图名以及一个数据框创建一个sp的对象
+
+## 绘制全国范围内的空气质量交互地图
+首先从网站http://www.pm25.in/rank上爬取数据(很简单，因为直接在table里面)，然后只选AQI来作图。注意，用颜色的深度来表示指数大小，越大质量越差。
+
+```{r cars}
+# 读取网页的表格
+# 我只是一只小爬虫
+table = readHTMLTable("http://www.pm25.in/rank",  
+                      encoding = "UTF-8", stringsAsFactors = F)[[1]]
+
+# 整理数据并命名
+dat = table[ , 2:3]
+names(dat) = c("city","AQI")
+dat$AQI = as.numeric(dat$AQI)
+
+# 调用geojsonMap进行绘制
+geojsonMap(dat, "city",
+           popup =  paste0(dat$city, ":", dat$AQI),
+           palette = "Reds", legendTitle = "AQI")
+```
+
+## 通过demomap查找某个省(市)的数据
+### 通过regionNames显示城市支持的区域信息
+```{r}
+regionNames("浙江")
+```
+
+```{r}
+regionNames("宁波")
+```
+### 看下浙江省
+```{r echo=FALSE, warning=FALSE}
+demomap("浙江")
+```
+### 看下宁波
+```{r warning=FALSE}
+demomap("宁波")
+```
+
