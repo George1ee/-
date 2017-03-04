@@ -49,11 +49,11 @@ geojsonMap(dat, "city",
 
 ## 通过demomap查找某个省(市)的数据
 ### 通过regionNames显示城市支持的区域信息
-```{r}
+```{r warning=FALSE}
 regionNames("浙江")
 ```
 
-```{r}
+```{r warning=FALSE}
 regionNames("宁波")
 ```
 ### 看下浙江省
