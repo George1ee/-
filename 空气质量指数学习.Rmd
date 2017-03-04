@@ -56,14 +56,18 @@ regionNames("浙江")
 ```{r warning=FALSE}
 regionNames("宁波")
 ```
+
 ### 看下浙江省
 ```{r echo=FALSE, warning=FALSE}
 demomap("浙江")
 ```
+
 ### 看下宁波
 ```{r warning=FALSE}
 demomap("宁波")
 ```
+
+
 
 <footer>
 &copy; 2017 <a href="https://github.com/George1ee/learning-experience-of-R" target="_blank">George
