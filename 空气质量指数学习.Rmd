@@ -65,3 +65,6 @@ demomap("浙江")
 demomap("宁波")
 ```
 
+<footer>
+&copy; 2017 <a href="https://github.com/George1ee/learning-experience-of-R" target="_blank">George
+</footer>
