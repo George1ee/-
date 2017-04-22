@@ -1,0 +1,56 @@
+---
+title: "Time Series Study"
+author: "George Lee"
+date: "2017年4月21日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(TSA)
+```
+
+## 随机游走
+```{r}
+data("rwalk")
+plot(rwalk,type = "o")
+```
+
+## 随机余弦波
+```{r}
+t=seq(from=-24,to=24,by=0.4);n=length(t)
+y=rep(-10,n)
+for(i in 1:n){
+   w<-runif(1,0,1)
+   y[i]<-cos(2*pi*(t[i]/12+w))
+}
+plot(t,y,type="o")
+```
+
+## 回归方法
+两种考虑季节趋势的方法
+
+* 季节均值
+* 余弦模型（平稳过渡）
+
+### 季节均值
+可以用来方便的估计一般的非常数均值趋势模型参数，比如错误的估计随机游动：
+```{r}
+data("rwalk")
+model1=lm(rwalk~time(rwalk))
+summary(model1)
+plot(rwalk,type="o");abline(model1)
+```
+
+### 余弦模型
+季节趋势周期一年(前提是数据以月为周期)，harmonic(data,1)生成一个$\cos(2{\pi}ft)$,$\sin(2{\pi}ft)$的数据框，用来拟合
+$w_{1}\cos(2{\pi}ft)＋w_{2}\sin(2{\pi}ft)+c$
+```{r}
+##注意1/12=0.08333333，对这个数字要敏感
+data("tempdub")
+#time(tempdub)
+H=harmonic(tempdub,1)
+model1=lm(tempdub~H)
+summary(model1)#显然常数项很显著，所以保留
+```
+
